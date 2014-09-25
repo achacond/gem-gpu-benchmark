@@ -37,7 +37,7 @@ echo "Compiling ..."
 make clean all >> ../$log_file.out 2>> ../$log_file.err
 
 echo "Downloading cushaw2_index.tar.gz ..."
-wget http://downloads.sourceforge.net/project/cushaw2/CUSHAW2%20Indexer/cushaw2_index.tar.gz >> >> ../$log_file.out 2>> ../$log_file.err
+wget http://downloads.sourceforge.net/project/cushaw2/CUSHAW2%20Indexer/cushaw2_index.tar.gz >> ../$log_file.out 2>> ../$log_file.err
 
 echo "Unpaking ..."
 tar -xzvf cushaw2_index.tar.gz >> ../$log_file.out 2>> ../$log_file.err

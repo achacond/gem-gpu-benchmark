@@ -38,11 +38,11 @@ done
 # 454 Dataset
 ##############################
 
-454_dataset='H.Sapiens.454.Sim.1M.sam 		https://googledrive.com/host/0Bw2Nno1-eC2IdTNnTVR1czM0REk
+roche454_dataset='H.Sapiens.454.Sim.1M.sam 		https://googledrive.com/host/0Bw2Nno1-eC2IdTNnTVR1czM0REk
 			 H.Sapiens.454.Sim.1M.fastq 	https://googledrive.com/host/0Bw2Nno1-eC2IbUlFRHNqb3M2SXM
 			 H.Sapiens.454.Real.1M.fastq 	https://googledrive.com/host/0Bw2Nno1-eC2IMTFpVVFuSEJ1Y2M'
 
-echo "$454_dataset" | while read file_name url ; do
+echo "$roche454_dataset" | while read file_name url ; do
 	check_and_download $file_name $url
 done
 

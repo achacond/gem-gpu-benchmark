@@ -25,7 +25,7 @@ tar -xjvf bwa-0.7.10.tar.bz2 >> $log_file.out 2>> $log_file.err
 
 echo "Compiling ..."
 cd bwa-0.7.10
-make clean all >> $log_file.out 2>> ../$log_file.err
+make clean all >> ../$log_file.out 2>> ../$log_file.err
 
 echo "Cleaning ..."
 cd ..
