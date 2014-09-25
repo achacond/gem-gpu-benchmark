@@ -1,0 +1,11 @@
+--- Makefile	2014-07-12 16:25:17.000000000 +0200
++++ ../patches/soap3-pd/Makefile	2014-09-18 19:55:06.000000000 +0200
+@@ -34,7 +34,7 @@
+ CC = g++
+ #NVCC = /usr/local/cuda/bin/nvcc
+ NVCC = nvcc
+-CUDAFLAG = -cuda -arch=sm_20 --ptxas-options=-v
++CUDAFLAG = -cuda -arch=sm_35 --ptxas-options=-v
+ LIBFLAG = -L/usr/local/cuda/lib64/ -lcuda -lcudart
+ CFLAGS = -O3 -funroll-loops -march=core2 -fomit-frame-pointer -maccumulate-outgoing-args -Wno-unused-result -lm -static-libgcc -lz -mpopcnt #-mavx
+ 

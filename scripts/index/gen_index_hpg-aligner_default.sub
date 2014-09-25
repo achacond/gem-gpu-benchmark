@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --job-name="GenIndexHPG-aligner-default"
+#SBATCH --exclusive
+#SBATCH -w huberman
+
+#SBATCH --time=48:00:00
+#SBATCH --partition=p_hpca4se 
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user="alejandro.chacon@uab.es"
+#SBATCH --output=../../logs/Gen-Index-HPG-aligner-OUT-%j.log 
+#SBATCH --error=../../logs/Gen-Index-HPG-aligner-ERR-%j.log 
+
+### Info
+echo "HPG-aligner V1.0.0 - Building index with human genome v37 - default parameters"
+
+########
+mkdir -p ../../data/indexes/HG_index_hpg-aligner_default
+
+### Run command
+time ../../software/mappers/hpg-aligner-1.0.0/bin/hpg-aligner build-sa-index -g ../../data/references/hsapiens_v37.fa -i ../../data/indexes/HG_index_hpg-aligner_default/

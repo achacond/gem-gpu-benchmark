@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#SBATCH --job-name="GenIndexGEM-GPU-profile"
+#SBATCH --exclusive
+#SBATCH -w huberman
+
+#SBATCH --time=48:00:00
+#SBATCH --partition=p_hpca4se 
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user="alejandro.chacon@uab.es"
+#SBATCH --output=../../logs/Gen-Index-GEM-GPU-Profile-FR-S4-OUT-%j.log 
+#SBATCH --error=../../logs/Gen-Index-GEM-GPU-Profile-FR-S4-ERR-%j.log 
+
+### Info
+echo "GEM GPU (Big indexes "profile") - Indexing human genome v37 - default parameters"
+
+########
+mkdir -p ../../data/indexes/HG_index_GEM-GPU_profile_FR_S4_default
+
+### Run command
+time ../../software/mappers/gem-gpu/bin/gem-indexer -i ../../data/references/hsapiens_v37.fa -o ../../data/references/hsapiens_v37.FR.s4 --index-complement=yes -s 4 -v -t 32
+
+mv ../../data/references/hsapiens_v37.FR.s4* ../../data/indexes/HG_index_GEM-GPU_profile_FR_S4_default

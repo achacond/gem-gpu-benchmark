@@ -1,0 +1,20 @@
+--- soap3-dp.ini	2014-07-12 15:27:54.000000000 +0200
++++ ../patches/soap3-pd/soap3-dp.ini	2014-09-18 20:12:54.000000000 +0200
+@@ -6,7 +6,7 @@
+ # NumOfCpuThreads defines the number of threads
+ # the program will spawn to perform host alignment.
+ # Valid values are from 1 to 16.
+-NumOfCpuThreads=10
++NumOfCpuThreads=16
+ 
+ # HostAlignmentModel can be either "8G" or "16G".
+ # This govern the alignment model used in host alignment.
+@@ -48,7 +48,7 @@
+ 
+ [Device]
+ # GPUMemory defines the amount of memory on the GPU card (unit: gigabytes).
+-GPUMemory=6
++GPUMemory=5
+ 
+ [DP]
+ # the pairs of read, which one end has no hit but another has, will proceed to DP

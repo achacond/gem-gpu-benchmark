@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#SBATCH --job-name="GenIndexNvBowtie-default"
+#SBATCH --exclusive
+#SBATCH -w huberman
+#SBATCH --gres=gpu:2
+
+#SBATCH --time=48:00:00
+#SBATCH --partition=p_hpca4se 
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user="alejandro.chacon@uab.es"
+#SBATCH --output=../../logs/Gen-Index-NvBowtie-OUT-%j.log 
+#SBATCH --error=../../logs/Gen-Index-NvBowtie-ERR-%j.log 
+
+### Info
+echo "NVIDIA Bowtie 0.9.9- Indexing human genome v37 - default parameters"
+
+########
+mkdir -p ../../data/indexes/HG_index_NvBowtie_default
+
+module load cuda/6.5
+
+### Run command
+time ../../software/mappers/nvbio-0.9.9.3/release/nvBWT/nvBWT ../../data/references/hsapiens_v37.fa ../../data/indexes/HG_index_NvBowtie_default/ --device 0

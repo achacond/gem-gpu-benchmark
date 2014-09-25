@@ -1,0 +1,11 @@
+--- Makefile	2013-03-07 15:32:11.000000000 +0100
++++ ../patches/cushaw2-gpu/Makefile	2014-09-18 17:18:54.000000000 +0200
+@@ -38,7 +38,7 @@
+ endif
+ 
+ #GPU architecture
+-GPU_ARCH = sm_30
++GPU_ARCH = sm_35
+ GPU_ARCH_FLAGS = -arch $(GPU_ARCH)
+ ifeq ($(GPU_ARCH), sm_35)
+ 	GPU_ARCH_FLAGS += -DHAVE_SM_35
