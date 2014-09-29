@@ -1,14 +1,24 @@
 #!/bin/bash
 
+#SBATCH --job-name="SNAP-SE"
+#SBATCH --exclusive
+#SBATCH -w huberman
+
+#SBATCH --time=1:00:00
+#SBATCH --partition=p_hpca4se 
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user="alejandro.chacon@uab.es"
+
 if [[ -n $(hostname | grep aopccuda) ]]; then
-	echo "Aopccuda Node"
 	source /etc/profile.d/module.sh
+	module load GCC/4.9.1
 	module load CUDA/6.5.14
 	num_threads="8"
 fi
 
 if [[ -n $(hostname | grep huberman) ]]; then
-	echo "Huberman Node"
+	module load gcc/4.9.1
 	module load cuda/6.5
 	num_threads="32"
 fi
@@ -26,12 +36,13 @@ dataset_path="../../../data/datasets"
 results_path="../../../data/results"
 log_path="../../../logs"
 
-
+echo "> Benchmarks for SNAP 1.0Beta.10: $IN"
 
 # Warm up
 ################################################################
 
-OUT="$OUT_PREFIX.warm.t$num_threads"
+OUT="SNAP.$OUT_PREFIX.warm.t$num_threads"
+echo "==> Mapping $OUT"
 time ./snap single $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.fastq -t $num_threads -h 50   -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
 
 
@@ -39,13 +50,20 @@ time ./snap single $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.fastq
 # Test multi-threading
 ################################################################
 
-OUT="$OUT_PREFIX.h50.t$num_threads"
+OUT="SNAP.$OUT_PREFIX.h50.t$num_threads"
+echo "==> Mapping $OUT"
 time ./snap single $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.fastq -t $num_threads -h 50   -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
-OUT="$OUT_PREFIX.h100.t$num_threads"
+
+OUT="SNAP.$OUT_PREFIX.h100.t$num_threads"
+echo "==> Mapping $OUT"
 time ./snap single $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.fastq -t $num_threads -h 100  -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
-OUT="$OUT_PREFIX.h1000.t$num_threads"
+
+OUT="SNAP.$OUT_PREFIX.h1000.t$num_threads"
+echo "==> Mapping $OUT"
 time ./snap single $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.fastq -t $num_threads -h 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
-OUT="$OUT_PREFIX.h2000.t$num_threads"
+
+OUT="SNAP.$OUT_PREFIX.h2000.t$num_threads"
+echo "==> Mapping $OUT"
 time ./snap single $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.fastq -t $num_threads -h 2000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
 
 #Returning to original path

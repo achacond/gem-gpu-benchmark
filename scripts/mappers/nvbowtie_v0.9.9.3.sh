@@ -1,16 +1,27 @@
 #!/bin/bash
 
+#SBATCH --job-name="nvBio-install"
+#SBATCH -w huberman
+
+#SBATCH --time=1:00:00
+#SBATCH --partition=p_hpca4se 
+#SBATCH --exclusive
+#SBATCH --gres=gpu:2
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user="alejandro.chacon@uab.es"
+
 cmake_bin=cmake
 if [[ -n $(hostname | grep aopccuda) ]]; then
 	source /etc/profile.d/module.sh
 	module load CUDA/6.5.14
-	module load GCC/4.8.1
+	module load GCC/4.9.1
 	cmake_bin=cmake
 fi
 
 if [[ -n $(hostname | grep huberman) ]]; then
 	module load cuda/6.5
-	module load gcc/4.8.1
+	module load gcc/4.9.1
 	cmake_bin=cmake28
 fi
 
@@ -24,7 +35,7 @@ echo "Start installing nvBowtie (nvBio) V0.9.9.3"
 rm -Rf nvbio-0.9.9.3
 rm -f v0.9.9.3.tar.gz
 
-echo "Downloading v0.9.9.3.tar.gz ..."
+echo "Downloading v0.9.9.tar.gz ..."
 wget https://github.com/NVlabs/nvbio/archive/v0.9.9.3.tar.gz  >> $log_file.out 2>> $log_file.err
 
 echo "Unpaking ..."

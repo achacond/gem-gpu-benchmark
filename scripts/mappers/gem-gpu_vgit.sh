@@ -1,14 +1,25 @@
 #!/bin/bash
 
+#SBATCH --job-name="GEM3GPU-install"
+#SBATCH -w huberman
+
+#SBATCH --time=1:00:00
+#SBATCH --partition=p_hpca4se 
+#SBATCH --exclusive
+#SBATCH --gres=gpu:2
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user="alejandro.chacon@uab.es"
+
 if [[ -n $(hostname | grep aopccuda) ]]; then
 	source /etc/profile.d/module.sh
 	module load CUDA/6.5.14
-	module load GCC/4.8.1
+	module load GCC/4.9.1
 fi
 
 if [[ -n $(hostname | grep huberman) ]]; then
 	module load cuda/6.5
-	module load gcc/4.8.1
+	module load gcc/4.9.1
 fi
 
 log_file=$1
