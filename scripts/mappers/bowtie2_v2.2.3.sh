@@ -5,12 +5,6 @@
 
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
-#SBATCH --exclusive
-#SBATCH --gres=gpu:2
-
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user="alejandro.chacon@uab.es"
-
 
 if [[ -n $(hostname | grep aopccuda) ]]; then
 	source /etc/profile.d/module.sh
