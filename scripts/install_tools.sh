@@ -5,21 +5,8 @@
 
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
-#SBATCH --exclusive
-#SBATCH --gres=gpu:2
 
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user="alejandro.chacon@uab.es"
-
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-fi
-
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-fi
-
+source node_profiles.sh
 
 #Changing working directory
 original_path=`pwd`
@@ -27,23 +14,23 @@ tools_path="../software/tools/"
 cd $tools_path
 
 
-output_log="../../logs/installation_tools.out"
-error_log="../../logs/installation_tools.err"
+logfile="../../logs/installation_tools.log"
 
 echo "Path for log files:"
-echo "     $output_log"
-echo "     $error_log"
+echo "     $logfile"
 echo ""
 
-rm -f $output_log $error_log
+rm -f $logfile
 
 # Install GEMTools
 ##################################
 echo "Start installing GEMTools"
+echo "Start installing GEMTools" > $logfile
+
 
 echo "Compiling ..."
 cd GEMTools.Dev
-make clean all >> ../$output_log 2>> ../$error_log
+make clean all >> $logfile 2>&1
 cd ..
 
 echo "Done"

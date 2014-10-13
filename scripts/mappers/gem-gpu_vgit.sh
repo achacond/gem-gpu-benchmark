@@ -6,19 +6,12 @@
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
 
+#SBATCH --output=../../logs/GEM.installation_mapping_tools.log
+#SBATCH --error=../../logs/GEM.installation_mapping_tools.log
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load CUDA/6.5.14
-	module load GCC/4.9.1
-fi
+source ../../scripts/node_profiles.sh
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load cuda/6.5
-	module load gcc/4.9.1
-fi
-
-log_file=$1
+logfile="$1"GEM.installation_mapping_tools.err
 
 
 # Install gem-gpu (git repository)
@@ -27,15 +20,17 @@ log_file=$1
 #####################################
 
 echo "Start installing gem-gpu from git repository"
-rm -Rf gem-gpu
+echo "Start installing gem-gpu from git repository" > $logfile 2>&1
+
+rm -Rf gem-gpu >> $logfile 2>&1
 
 echo "Downloading gem-gpu ..."
-git clone git@github.com:achacond/gem-gpu.git >> $log_file.out 2>> $log_file.err
+git clone git@github.com:achacond/gem-gpu.git >> $logfile 2>&1
 
 echo "Compiling ..."
 cd gem-gpu
-./configure >> ../$log_file.out 2>> ../$log_file.err
-make clean all >> ../$log_file.out 2>> ../$log_file.err
+./configure >> ../$logfile 2>&1
+make clean all >> ../$logfile 2>&1
 
 cd ..
 echo "Done"

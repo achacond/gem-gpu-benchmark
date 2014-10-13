@@ -1,23 +1,19 @@
 #!/bin/bash
 
-#SBATCH --job-name="GenIndexBWA-default"
+#SBATCH --job-name="G.BWA-default"
 #SBATCH --exclusive
 #SBATCH -w huberman
 
 #SBATCH --time=5:00:00
 #SBATCH --partition=p_hpca4se 
 
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=end
 #SBATCH --mail-user="alejandro.chacon@uab.es"
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-fi
+#SBATCH --output=../../logs/BWA.Gen-Index.log
+#SBATCH --error=../../logs/BWA.Gen-Index.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-fi
+source ../node_profiles.sh
 
 logfile="../../logs/Gen-Index-BWA.log"
 
@@ -25,7 +21,7 @@ logfile="../../logs/Gen-Index-BWA.log"
 echo "BWA V0.7.10 - Indexing human genome v37 - default parameters" > $logfile
 
 ########
-mkdir -p ../../data/indexes/HG_index_BWA_default
+mkdir -p ../../data/indexes/HG_index_BWA_default >> $logfile 2>&1
 
 ### Run command
 time ../../software/mappers/bwa-0.7.10/bwa index ../../data/references/hsapiens_v37.fa >> $logfile 2>&1

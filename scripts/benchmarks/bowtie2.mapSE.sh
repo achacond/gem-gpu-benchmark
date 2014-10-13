@@ -4,24 +4,16 @@
 #SBATCH --exclusive
 #SBATCH -w huberman
 
-#SBATCH --time=1:00:00
+#SBATCH --time=5:00:00
 #SBATCH --partition=p_hpca4se 
 
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=end
 #SBATCH --mail-user="alejandro.chacon@uab.es"
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-	module load CUDA/6.5.14
-	num_threads="8"
-fi
+#SBATCH --output=../../logs/BOWTIE2.summary.log 
+#SBATCH --error=../../logs/BOWTIE2.summary.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-	module load cuda/6.5
-	num_threads="32"
-fi
+source ../node_profiles.sh
 
 IN=$1
 OUT_PREFIX=$IN
@@ -43,22 +35,22 @@ echo "> Benchmarks for BOWTIE2 2.2.3: $IN"
 
 OUT="BOWTIE2.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam 2> $log_path/$OUT.err > $log_path/$OUT.out
+time ./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 # Test multi-threading
 ################################################################
 
 OUT="BOWTIE2.$OUT_PREFIX.very.fast.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bowtie2 --threads $num_threads --very-fast -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam 2> $log_path/$OUT.err > $log_path/$OUT.out
+time ./bowtie2 --threads $num_threads --very-fast -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 OUT="BOWTIE2.$OUT_PREFIX.default.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam 2> $log_path/$OUT.err > $log_path/$OUT.out
+time ./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 OUT="BOWTIE2.$OUT_PREFIX.very.sensitive.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bowtie2 --threads $num_threads --very-sensitive -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam 2> $log_path/$OUT.err > $log_path/$OUT.out
+time ./bowtie2 --threads $num_threads --very-sensitive -x $index_path/HG_index_bowtie2_default/hsapiens -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 #Returning to original path
 cd $original_path

@@ -6,16 +6,12 @@
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-fi
+#SBATCH --output=../../logs/HPG.installation_mapping_tools.log
+#SBATCH --error=../../logs/HPG.installation_mapping_tools.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-fi
+source ../../scripts/node_profiles.sh
 
-log_file=$1
+logfile="$1"HPG.installation_mapping_tools.err
 
 
 # Install HPG-aligner V1.0.0 (Stable branch)
@@ -31,16 +27,17 @@ log_file=$1
 ####################################
 
 echo "Start installing HPG-aligner V1.0.0"
+echo "Start installing HPG-aligner V1.0.0" > $logfile 2>&1
 rm -Rf hpg-aligner-1.0.0
 
 echo "Downloading v0.9.9.3.tar.gz ..."
-git clone https://github.com/opencb/hpg-aligner.git >> $log_file.out 2>> $log_file.err
+git clone https://github.com/opencb/hpg-aligner.git >> $logfile 2>&1
 mv hpg-aligner hpg-aligner-1.0.0
 cd hpg-aligner-1.0.0/
-git submodule update --init >> ../$log_file.out 2>> ../$log_file.err
+git submodule update --init >> ../$logfile 2>&1
 
 echo "Compiling ..."
-scons -c >> ../$log_file.out 2>> ../$log_file.err
-scons >> ../$log_file.out 2>> ../$log_file.err
+scons -c >> ../$logfile 2>&1
+scons >> ../$logfile 2>&1
 cd ..
 echo "Done"

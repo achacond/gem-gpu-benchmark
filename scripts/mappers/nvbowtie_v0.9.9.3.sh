@@ -7,45 +7,38 @@
 #SBATCH --partition=p_hpca4se 
 #SBATCH --gres=gpu:2
 
-cmake_bin=cmake
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load CUDA/6.5.14
-	module load GCC/4.9.1
-	cmake_bin=cmake
-fi
+#SBATCH --output=../../logs/NVBOWTIE.installation_mapping_tools.log
+#SBATCH --error=../../logs/NVBOWTIE.installation_mapping_tools.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load cuda/6.5
-	module load gcc/4.9.1
-	cmake_bin=cmake28
-fi
+source ../../scripts/node_profiles.sh
 
-log_file=$1
+logfile="$1"NVBOWTIE.installation_mapping_tools.err
 
 
 # Install nvBowtie (nvBio) V0.9.9.3
 ####################################
 
 echo "Start installing nvBowtie (nvBio) V0.9.9.3"
+echo "Start installing nvBowtie (nvBio) V0.9.9.3" > $logfile 2>&1
+
 rm -Rf nvbio-0.9.9.3
 rm -f v0.9.9.3.tar.gz
 
 echo "Downloading v0.9.9.tar.gz ..."
-wget https://github.com/NVlabs/nvbio/archive/v0.9.9.3.tar.gz  >> $log_file.out 2>> $log_file.err
+wget https://github.com/NVlabs/nvbio/archive/v0.9.9.3.tar.gz  >> $logfile 2>&1
 
 echo "Unpaking ..."
-tar -xzvf v0.9.9.3.tar.gz  >> $log_file.out 2>> $log_file.err
+tar -xzvf v0.9.9.3.tar.gz  >> $logfile 2>&1
 
 echo "Compiling ..."
 cd nvbio-0.9.9.3
-mkdir release
+mkdir -p release  >> ../$logfile 2>&1
 cd release 
-$cmake_bin ../  >> ../../$log_file.out 2>> ../../$log_file.err
-make clean all >> ../../$log_file.out 2>> ../../$log_file.err
+$cmake_bin ../  >> ../../$logfile 2>&1
+make clean all >> ../../$logfile 2>&1
 
 echo "Cleaning ..."
 cd ../..
-rm -f v0.9.9.3.tar.gz
+rm -f v0.9.9.3.tar.gz  >> $logfile 2>&1
 echo "Done"
 echo ""

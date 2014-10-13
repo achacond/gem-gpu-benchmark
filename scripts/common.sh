@@ -37,6 +37,24 @@ function check_and_download()
 	fi
 }
 
+function launch_benchmark()
+{
+    source ../node_profiles.sh
+
+    prefix_file=$1
+    mapper_script=$2
+    fastaq_file=$3
+    path_logs=../../logs
+
+    if [ $binary_launcher == "bash" ]
+    then
+        $binary_launcher $mapper_script $fastaq_file > $path_logs/$prefix_file.$fastaq_file.summary.log  2>&1
+    else
+        #$binary_launcher $mapper_script $fastaq_file > $path_logs/$prefix_file.$fastaq_file.summary.log 2>&1
+        $binary_launcher --output=$path_logs/$prefix_file.$fastaq_file.summary.log --error=$path_logs/$prefix_file.$fastaq_file.summary.log $mapper_script $fastaq_file
+    fi
+}
+
 
 
 

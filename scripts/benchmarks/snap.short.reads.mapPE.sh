@@ -7,21 +7,13 @@
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
 
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=end
 #SBATCH --mail-user="alejandro.chacon@uab.es"
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-	module load CUDA/6.5.14
-	num_threads="8"
-fi
+#SBATCH --output=../../logs/SNAP.summary.log 
+#SBATCH --error=../../logs/SNAP.summary.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-	module load cuda/6.5
-	num_threads="32"
-fi
+source ../node_profiles.sh
 
 IN=$1
 OUT_PREFIX=$IN
@@ -43,7 +35,7 @@ echo "> Benchmarks for SNAP 1.0Beta.10: $IN"
 
 OUT="SNAP.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT"
-time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 50 -H 500 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 50 -H 500 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 
 # Test single-thread
@@ -51,19 +43,19 @@ time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fas
 
 #OUT="SNAP.$OUT_PREFIX.h50.t1"
 #echo "==> Mapping $OUT"
-#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 50 -H 500 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 50 -H 500 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 #OUT="SNAP.$OUT_PREFIX.h100.t1"
 #echo "==> Mapping $OUT"
-#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 100 -H 1000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 100 -H 1000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 #OUT="SNAP.$OUT_PREFIX.h1000.t1"
 #echo "==> Mapping $OUT"
-#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 1000 -H 16000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 1000 -H 16000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 #OUT="SNAP.$OUT_PREFIX.h2000.t1"
 #echo "==> Mapping $OUT"
-#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 2000 -H 20000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+#time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t 1 -h 2000 -H 20000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 
 
@@ -72,19 +64,19 @@ time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fas
 
 OUT="SNAP.$OUT_PREFIX.h50.t$num_threads"
 echo "==> Mapping $OUT"
-time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 50 -H 500 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 50 -H 500 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 OUT="SNAP.$OUT_PREFIX.h100.t$num_threads"
 echo "==> Mapping $OUT"
-time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 100 -H 1000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 100 -H 1000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 OUT="SNAP.$OUT_PREFIX.h1000.t$num_threads"
 echo "==> Mapping $OUT"
-time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 1000 -H 16000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 1000 -H 16000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 OUT="SNAP.$OUT_PREFIX.h2000.t$num_threads"
 echo "==> Mapping $OUT"
-time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 2000 -H 20000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.out 2> $log_path/$OUT.err
+time ./snap paired $index_path/HG_index_SNAP_short_reads $dataset_path/$IN.1.fastq $dataset_path/$IN.2.fastq -t $num_threads -h 2000 -H 20000 -s 0 1000 -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
 
 #Returning to original path
 cd $original_path

@@ -7,18 +7,12 @@
 #SBATCH --partition=p_hpca4se 
 #SBATCH --gres=gpu:2
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load CUDA/6.5.14
-	module load GCC/4.9.1
-fi
+#SBATCH --output=../../logs/CUSHAW2-GPU.installation_mapping_tools.log
+#SBATCH --error=../../logs/CUSHAW2-GPU.installation_mapping_tools.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load cuda/6.5
-	module load gcc/4.9.1
-fi
+source ../../scripts/node_profiles.sh
 
-log_file=$1
+logfile="$1"CUSHAW2-GPU.installation_mapping_tools.err
 
 # Install Cushaw2-GPU V2.1.8-r16
 ####################################
@@ -27,36 +21,37 @@ log_file=$1
 ####################################
 
 echo "Start installing Cushaw2-GPU V2.1.8-r16"
+echo "Start installing Cushaw2-GPU V2.1.8-r16" > $logfile 2>&1
 rm -Rf cushaw2-gpu-2.1.8-r16
 rm -f cushaw2-gpu-2.1.8-r16.tar.gz
 
 echo "Downloading cushaw2-gpu-2.1.8-r16.tar.gz ..."
-wget http://downloads.sourceforge.net/project/cushaw2/CUSHAW2-GPU/cushaw2-gpu-2.1.8-r16.tar.gz >> $log_file.out 2>> $log_file.err
+wget http://downloads.sourceforge.net/project/cushaw2/CUSHAW2-GPU/cushaw2-gpu-2.1.8-r16.tar.gz >> $logfile 2>&1
 
 echo "Unpaking ..."
-tar -xvzf cushaw2-gpu-2.1.8-r16.tar.gz >> $log_file.out 2>> $log_file.err
+tar -xvzf cushaw2-gpu-2.1.8-r16.tar.gz >> $logfile 2>&1
 
 echo "Patching with custom settings ..."
 cd cushaw2-gpu-2.1.8-r16
 patch Makefile < ../patches/cushaw2-gpu/cushaw2-gpu.patch 
 
 echo "Compiling ..."
-make clean all >> ../$log_file.out 2>> ../$log_file.err
+make clean all >> ../$logfile 2>&1
 
 echo "Downloading cushaw2_index.tar.gz ..."
-wget http://downloads.sourceforge.net/project/cushaw2/CUSHAW2%20Indexer/cushaw2_index.tar.gz >> ../$log_file.out 2>> ../$log_file.err
+wget http://downloads.sourceforge.net/project/cushaw2/CUSHAW2%20Indexer/cushaw2_index.tar.gz >> ../$logfile 2>&1
 
 echo "Unpaking ..."
-tar -xzvf cushaw2_index.tar.gz >> ../$log_file.out 2>> ../$log_file.err
+tar -xzvf cushaw2_index.tar.gz >> ../$logfile 2>&1
 
 echo "Compiling ..."
 cd cushaw2_index
-make clean all >> ../../$log_file.out 2>> ../../$log_file.err
+make clean all >> ../../$logfile 2>&1
 
 echo "Cleaning ..."
 cd ..
-rm -f cushaw2_index.tar.gz
+rm -f cushaw2_index.tar.gz >> ../$logfile 2>&1
 cd ..
-rm -f cushaw2-gpu-2.1.8-r16.tar.gz
+rm -f cushaw2-gpu-2.1.8-r16.tar.gz >> $logfile 2>&1
 echo "Done"
 echo ""

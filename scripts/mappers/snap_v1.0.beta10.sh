@@ -6,32 +6,39 @@
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
 
+#SBATCH --output=../../logs/SNAP.installation_mapping_tools.log
+#SBATCH --error=../../logs/SNAP.installation_mapping_tools.log
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-fi
+source ../../scripts/node_profiles.sh
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-fi
-
-log_file=$1
+logfile="$1"SNAP.installation_mapping_tools.err
 
 
-# Install SNAP V1.0beta.10
+# Install SNAP V1.0beta.50
 #####################################
 
-echo "Start installing SNAP V1.0beta.10"
-rm -f snap-1.0beta.10-linux.tar.gz
+echo "Start installing SNAP V1.0beta.50"
+echo "Start installing SNAP V1.0beta.50" > $logfile 2>&1
 
-echo "Downloading snap-1.0beta.10-linux.tar.gz ..."
-wget http://snap.cs.berkeley.edu/downloads/snap-1.0beta.10-linux.tar.gz >> $log_file.out 2>> $log_file.err
+rm -f dev.zip >> $logfile 2>&1
+#rm -f snap-1.0beta.10-linux.tar.gz >> $logfile 2>&1
+
+echo "Downloading snap-1.0beta.50.zip ..."
+wget https://github.com/amplab/snap/archive/dev.zip >> $logfile 2>&1
+#wget http://snap.cs.berkeley.edu/downloads/snap-1.0beta.10-linux.tar.gz >> $logfile 2>&1
 
 echo "Unpaking ..."
-tar -xzvf snap-1.0beta.10-linux.tar.gz >> $log_file.out 2>> $log_file.err
+unzip dev.zip >> $logfile 2>&1
+mv snap-dev snap-1.0beta.50-linux
+# snap-1.0beta.10-linux.tar.gz >> $logfile 2>&1
+
+echo "Installing ..."
+cd snap-1.0beta.50-linux
+make clean >> ../$logfile 2>&1
+make >> ../$logfile 2>&1
 
 echo "Cleaning ..."
-rm -f snap-1.0beta.10-linux.tar.gz
+cd ..
+rm -f dev.zip >> $logfile 2>&1
 echo "Done"
 echo ""

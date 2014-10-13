@@ -4,24 +4,16 @@
 #SBATCH --exclusive
 #SBATCH -w huberman
 
-#SBATCH --time=1:00:00
+#SBATCH --time=5:00:00
 #SBATCH --partition=p_hpca4se 
 
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=end
 #SBATCH --mail-user="alejandro.chacon@uab.es"
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-	module load CUDA/6.5.14
-	num_threads="8"
-fi
+#SBATCH --output=../../logs/BWA.summary.log 
+#SBATCH --error=../../logs/BWA.summary.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-	module load cuda/6.5
-	num_threads="32"
-fi
+source ../node_profiles.sh
 
 IN=$1
 OUT_PREFIX=$IN
@@ -43,7 +35,7 @@ echo "> Benchmarks for BWA 0.7.10: $IN"
 
 OUT="BWA.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bwa mem -t $num_threads $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.err
+time ./bwa mem -t $num_threads $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
 # Test multi-threading
 ################################################################
@@ -55,23 +47,23 @@ time ./bwa mem -t $num_threads $index_path/HG_index_BWA_default/hsapiens_v37.fa 
 
 OUT="BWA.$OUT_PREFIX.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bwa mem -t $num_threads $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.err
+time ./bwa mem -t $num_threads $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
 OUT="BWA.$OUT_PREFIX.c500.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bwa mem -t $num_threads -c 500 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.err
+time ./bwa mem -t $num_threads -c 500 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
 OUT="BWA.$OUT_PREFIX.c1000.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bwa mem -t $num_threads -c 1000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.err
+time ./bwa mem -t $num_threads -c 1000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
 OUT="BWA.$OUT_PREFIX.c16000.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bwa mem -t $num_threads -c 16000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.err
+time ./bwa mem -t $num_threads -c 16000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
 OUT="BWA.$OUT_PREFIX.c20000.k16.t$num_threads"
 echo "==> Mapping $OUT"
-time ./bwa mem -t $num_threads -k 16 -c 20000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.err
+time ./bwa mem -t $num_threads -k 16 -c 20000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
 #Returning to original path
 cd $original_path

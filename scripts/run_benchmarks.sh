@@ -1,30 +1,38 @@
 #!/bin/bash
 
-binary_launcher="bash"
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	binary_launcher="bash"
-fi
-
-if [[ -n $(hostname | grep huberman) ]]; then
-	binary_launcher="sbatch"
-fi
+source node_profiles.sh
+source common.sh
 
 #Changing working directory
 original_path=`pwd`
 scripts_path="benchmarks"
 cd $scripts_path
 
+
 # HiSeq Dataset - Single End
 ##############################
 
-HiSeq_dataset='H.Sapiens.HiSeq.Sim.1M H.Sapiens.HiSeq.Real.1M'
+HiSeq_dataset='H.Sapiens.HiSeqSE.Sim.10M'
 
-for fastaq_file in $HiSeq_dataset
+#for fastaq_file in $HiSeq_dataset
+#do
+	#launch_benchmark GEM gem.mapSE.sh $fastaq_file
+	#launch_benchmark BWA bwa.mem.mapSE.sh $fastaq_file
+	#launch_benchmark BOWTIE2 bowtie2.mapSE.sh $fastaq_file
+	#launch_benchmark SNAP snap.short.reads.mapSE.sh $fastaq_file
+#done
+
+# MiSeq Dataset - Single End
+##############################
+
+MiSeq_dataset='H.Sapiens.MiSeqSE.Sim.10M'
+
+for fastaq_file in $MiSeq_dataset
 do
-	binary_launcher gem.mapSE.sh $fastaq_file
-	binary_launcher bwa.mem.mapSE.sh $fastaq_file
-	binary_launcher bowtie2.mapSE.sh $fastaq_file
-	binary_launcher snap.short.reads.mapSE.sh $fastaq_file
+	#launch_benchmark GEM gem.mapSE.sh $fastaq_file
+	launch_benchmark BWA bwa.mem.mapSE.sh $fastaq_file
+	#launch_benchmark BOWTIE2 bowtie2.mapSE.sh $fastaq_file
+	#launch_benchmark SNAP snap.long.reads.mapSE.sh $fastaq_file
 done
 
 #Returning to original path

@@ -1,23 +1,19 @@
 #!/bin/bash
 
-#SBATCH --job-name="GenIndexBowtie2-default"
+#SBATCH --job-name="G.Bowtie2-default"
 #SBATCH --exclusive
 #SBATCH -w huberman
 
 #SBATCH --time=5:00:00
 #SBATCH --partition=p_hpca4se 
 
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=end
 #SBATCH --mail-user="alejandro.chacon@uab.es"
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-fi
+#SBATCH --output=../../logs/BOWTIE2.Gen-Index.log
+#SBATCH --error=../../logs/BOWTIE2.Gen-Index.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-fi
+source ../node_profiles.sh
 
 logfile="../../logs/Gen-Index-Bowtie2.log"
 
@@ -25,7 +21,7 @@ logfile="../../logs/Gen-Index-Bowtie2.log"
 echo "Bowtie2 V2.2.3 - Building index with human genome v37 - default parameters" > $logfile
 
 ########
-mkdir -p ../../data/indexes/HG_index_bowtie2_default
+mkdir -p ../../data/indexes/HG_index_bowtie2_default >> $logfile 2>&1
 
 ### Run command
 time ../../software/mappers/bowtie2-2.2.3/bowtie2-build ../../data/references/hsapiens_v37.fa ../../data/references/hsapiens >> $logfile 2>&1

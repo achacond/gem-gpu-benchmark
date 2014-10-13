@@ -6,35 +6,32 @@
 #SBATCH --time=1:00:00
 #SBATCH --partition=p_hpca4se 
 
-if [[ -n $(hostname | grep aopccuda) ]]; then
-	source /etc/profile.d/module.sh
-	module load GCC/4.9.1
-fi
+#SBATCH --output=../../logs/BWA.installation_mapping_tools.log
+#SBATCH --error=../../logs/BWA.installation_mapping_tools.log
 
-if [[ -n $(hostname | grep huberman) ]]; then
-	module load gcc/4.9.1
-fi
+source ../../scripts/node_profiles.sh
 
-log_file=$1
+logfile="$1"BWA.installation_mapping_tools.err
 
 # Install BWA V0.7.10
 ##################################
 echo "Start installing BWA V0.7.10"
+echo "Start installing BWA V0.7.10" > $logfile 2>&1
 rm -Rf bwa-0.7.10
 rm -f bwa-0.7.10.tar.bz2
 
 echo "Downloading bwa-0.7.10.tar.bz2 ..."
-wget http://downloads.sourceforge.net/project/bio-bwa/bwa-0.7.10.tar.bz2 >> $log_file.out 2>> $log_file.err
+wget http://downloads.sourceforge.net/project/bio-bwa/bwa-0.7.10.tar.bz2 >> $logfile 2>&1
 
 echo "Unpaking ..."
-tar -xjvf bwa-0.7.10.tar.bz2 >> $log_file.out 2>> $log_file.err
+tar -xjvf bwa-0.7.10.tar.bz2 >> $logfile 2>&1
 
 echo "Compiling ..."
 cd bwa-0.7.10
-make clean all >> ../$log_file.out 2>> ../$log_file.err
+make clean all >> ../$logfile 2>&1
 
 echo "Cleaning ..."
 cd ..
-rm -f bwa-0.7.10.tar.bz2
+rm -f bwa-0.7.10.tar.bz2 >> $logfile 2>&1
 echo "Done"
 echo ""
