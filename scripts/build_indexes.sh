@@ -29,13 +29,13 @@ echo "Launching nvBowtie indexing job ..."
 #$binary_launcher gen_index_nvbowtie_default.sh
 
 echo "Launching SNAP long-reads indexing job ..."
-$binary_launcher gen_index_SNAP_long_reads.sh
+#$binary_launcher gen_index_SNAP_long_reads.sh
 
 echo "Launching SNAP short-reads indexing job ..."
-$binary_launcher gen_index_SNAP_short_reads.sh
+#$binary_launcher gen_index_SNAP_short_reads.sh
 
-echo "Launching SOAP3-dp-GPU indexing job ..."
-#$binary_launcher gen_index_soap3-dp_default.sh
+echo "Launching SOAP3DP-GPU indexing job ..."
+$binary_launcher gen_index_soap3-dp_default.sh
 
 #Returning to original path
 cd $original_path

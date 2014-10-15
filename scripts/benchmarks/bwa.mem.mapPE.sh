@@ -37,7 +37,7 @@ OUT="BWA.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT"
 time ./bwa mem -p $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
 
-# Test single-thread
+# Test multi-threading
 ################################################################
 # Default -k [19]  and -c [10000]
 # - Min seed length, matches shorter than (-k) will be missed
@@ -45,28 +45,6 @@ time ./bwa mem -p $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path
 #	  (insensitive parameter)
 #################################################################
 
-#OUT=BWA.$OUT_PREFIX.t1
-#echo "==> Mapping $OUT"
-#time ./bwa mem -p $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
-
-#OUT=BWA.$OUT_PREFIX.c500.t1
-#echo "==> Mapping $OUT"
-#time ./bwa mem -p -c 500 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
-
-#OUT=BWA.$OUT_PREFIX.c1000.t1
-#echo "==> Mapping $OUT"
-#time ./bwa mem -p -c 1000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
-
-#OUT=BWA.$OUT_PREFIX.c16000.t1
-#echo "==> Mapping $OUT"
-#time ./bwa mem -p -c 16000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
-
-#OUT=BWA.$OUT_PREFIX.c20000.k16.t1
-#echo "==> Mapping $OUT"
-#time ./bwa mem -p -k 16 -c 20000 $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
-
-# Test multi-threading
-################################################################
 OUT="BWA.$OUT_PREFIX.t$num_threads"
 echo "==> Mapping $OUT"
 time ./bwa mem -p -t $num_threads $index_path/HG_index_BWA_default/hsapiens_v37.fa $dataset_path/$IN.fastq > $results_path/$OUT.sam 2> $log_path/$OUT.log
