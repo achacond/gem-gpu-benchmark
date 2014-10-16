@@ -14,6 +14,7 @@
 #SBATCH --output=../../logs/CUSHAW2.mapping.summary.log 
 #SBATCH --error=../../logs/CUSHAW2.mapping.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 IN=$1
@@ -37,7 +38,7 @@ echo "> Benchmarks for CUSHAW2 GPU 2.1.8-r16: $IN"
 
 OUT="CUSHAW2.$OUT_PREFIX.warm.K20"
 echo "==> Mapping $OUT"
-\time -v ./cushaw2-gpu -t $num_threads -r $index_path/HG_index_cushaw2-gpu_default/hsapiens_v37 -f $dataset_path/$IN.1.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./cushaw2-gpu -t $num_threads -r $index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 
 # Test multi-threading
@@ -51,11 +52,11 @@ echo "==> Mapping $OUT"
 
 OUT="CUSHAW2.$OUT_PREFIX.default.K20"
 echo "==> Mapping $OUT"
-\time -v ./cushaw2-gpu -t $num_threads -r $index_path/HG_index_cushaw2-gpu_default/hsapiens_v37 -f $dataset_path/$IN.1.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./cushaw2-gpu -t $num_threads -r $index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 OUT="CUSHAW2.$OUT_PREFIX.sensitive.K20"
 echo "==> Mapping $OUT"
-\time -v ./cushaw2-gpu -t $num_threads -sensitive -r $index_path/HG_index_cushaw2-gpu_default/hsapiens_v37 -f $dataset_path/$IN.1.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./cushaw2-gpu -t $num_threads -sensitive -r $index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 
 #Returning to original path

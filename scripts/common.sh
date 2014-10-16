@@ -50,11 +50,14 @@ function launch_benchmark()
     then
         $binary_launcher $mapper_script $fastaq_file > $path_logs/$prefix_file.$fastaq_file.summary.log  2>&1
     else
-        #$binary_launcher $mapper_script $fastaq_file > $path_logs/$prefix_file.$fastaq_file.summary.log 2>&1
         $binary_launcher --output=$path_logs/$prefix_file.$fastaq_file.summary.log --error=$path_logs/$prefix_file.$fastaq_file.summary.log $mapper_script $fastaq_file
     fi
 }
 
+function profile()
+{
+	\time -v /bin/sh -c "$*"
+}
 
 
 

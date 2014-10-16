@@ -13,6 +13,7 @@
 #SBATCH --output=../../logs/HPG.gindex.summary.log
 #SBATCH --error=../../logs/HPG.gindex.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 logfile="../../logs/HPG.gindex.err"
@@ -24,4 +25,5 @@ echo "HPG-aligner V2.0.0 - Building index with human genome v37 - default parame
 mkdir -p ../../data/indexes/HG_index_hpg-aligner_default >> $logfile 2>&1
 
 ### Run command
-\time -v ../../software/mappers/hpg-aligner-2.0.0/bin/hpg-aligner build-sa-index -g ../../data/references/hsapiens_v37.fa -i ../../data/indexes/HG_index_hpg-aligner_default/ >> $logfile 2>&1
+profile "../../software/mappers/hpg-aligner-2.0.0/bin/hpg-aligner build-sa-index -g ../../data/references/hsapiens_v37.fa -i ../../data/indexes/HG_index_hpg-aligner_default/ >> $logfile 2>&1"
+cp ../../data/references/hsapiens_v37.fa ../../data/indexes/HG_index_hpg-aligner_default/hsapiens_v37.fa

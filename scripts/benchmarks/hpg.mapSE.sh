@@ -13,6 +13,7 @@
 #SBATCH --output=../../logs/HPG.summary.log 
 #SBATCH --error=../../logs/HPG.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 IN=$1
@@ -36,7 +37,7 @@ echo "> Benchmarks for HPG-aligner 2.0.0: $IN"
 
 OUT="HPG.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT"
-\time -v ./hpg-aligner dna --cpu-threads=$num_threads -i=$index_path/HG_index_hpg-aligner_default/hsapiens_v37.fa --fastq=$dataset_path/$IN.fastq -o=$results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./hpg-aligner dna --cpu-threads $num_threads -i $index_path/HG_index_hpg-aligner_default/ -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam> $log_path/$OUT.log 2>&1"
 
 
 # Test multi-threading
@@ -53,15 +54,15 @@ echo "==> Mapping $OUT"
 
 OUT="HPG.$OUT_PREFIX.fast.t$num_threads"
 echo "==> Mapping $OUT"
-\time -v ./hpg-aligner dna --cpu-threads=$num_threads --num-seeds=10 -i=$index_path/HG_index_hpg-aligner_default/hsapiens_v37.fa --fastq=$dataset_path/$IN.fastq -o=$results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./hpg-aligner dna --cpu-threads $num_threads --num-seeds 10 -i $index_path/HG_index_hpg-aligner_default/ -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 OUT="HPG.$OUT_PREFIX.default.t$num_threads"
 echo "==> Mapping $OUT"
-\time -v ./hpg-aligner dna --cpu-threads=$num_threads -i=$index_path/HG_index_hpg-aligner_default/hsapiens_v37.fa --fastq=$dataset_path/$IN.fastq -o=$results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./hpg-aligner dna --cpu-threads $num_threads -i $index_path/HG_index_hpg-aligner_default/ -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 OUT="HPG.$OUT_PREFIX.sensitive.t$num_threads"
 echo "==> Mapping $OUT"
-\time -v ./hpg-aligner dna --cpu-threads=$num_threads --num-seeds=40 -i=$index_path/HG_index_hpg-aligner_default/hsapiens_v37.fa --fastq=$dataset_path/$IN.fastq -o=$results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./hpg-aligner dna --cpu-threads $num_threads --num-seeds 40 -i $index_path/HG_index_hpg-aligner_default/ -f $dataset_path/$IN.fastq -o $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 
 #Returning to original path

@@ -13,6 +13,7 @@
 #SBATCH --output=../../logs/BOWTIE2.summary.log 
 #SBATCH --error=../../logs/BOWTIE2.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 IN=$1
@@ -35,7 +36,8 @@ echo "> Benchmarks for BOWTIE2 2.2.3: $IN"
 
 OUT="BOWTIE2.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT"
-\time ./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+echo "./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
+profile "./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 
 # Test multi-threading
@@ -52,15 +54,15 @@ echo "==> Mapping $OUT"
 
 OUT="BOWTIE2.$OUT_PREFIX.very.fast.t$num_threads"
 echo "==> Mapping $OUT"
-\time ./bowtie2 --threads $num_threads --very-fast -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./bowtie2 --threads $num_threads --very-fast -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 OUT="BOWTIE2.$OUT_PREFIX.default.t$num_threads"
 echo "==> Mapping $OUT"
-\time ./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./bowtie2 --threads $num_threads -x $index_path/HG_index_bowtie2_default/hsapiens.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 OUT="BOWTIE2.$OUT_PREFIX.very.sensitive.t$num_threads"
 echo "==> Mapping $OUT"
-\time ./bowtie2 --threads $num_threads --very-sensitive -x $index_path/HG_index_bowtie2_default/hsapiens_v37.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./bowtie2 --threads $num_threads --very-sensitive -x $index_path/HG_index_bowtie2_default/hsapiens_v37.fa -U $dataset_path/$IN.fastq -S $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 #Returning to original path
 cd $original_path

@@ -14,6 +14,7 @@
 #SBATCH --output=../../logs/NVBOWTIE.summary.log 
 #SBATCH --error=../../logs/NVBOWTIE.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 IN=$1
@@ -36,7 +37,7 @@ echo "> Benchmarks for NVBOWTIE 0.9.9.3: $IN"
 
 OUT="NVBOWTIE.$OUT_PREFIX.warm.K20"
 echo "==> Mapping $OUT"
-\time -v ./nvBowtie --seed-len 22 --max-reseed 2 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37 $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./nvBowtie --seed-len 22 --max-reseed 2 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37.fa $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 
 # Test multi-threading
@@ -47,15 +48,17 @@ echo "==> Mapping $OUT"
 
 OUT="NVBOWTIE.$OUT_PREFIX.very-fast.K20"
 echo "==> Mapping $OUT"
-\time -v ./nvBowtie --seed-len 22 --max-reseed 1 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37 $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./nvBowtie --seed-len 22 --max-reseed 1 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37.fa $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
 
 OUT="NVBOWTIE.$OUT_PREFIX.default.K20"
 echo "==> Mapping $OUT"
-\time -v ./nvBowtie --seed-len 22 --max-reseed 2 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37 $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./nvBowtie --seed-len 22 --max-reseed 2 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37.fa $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
+
 
 OUT="NVBOWTIE.$OUT_PREFIX.very-sensitive.K20"
 echo "==> Mapping $OUT"
-\time -v ./nvBowtie --seed-len 20 --max-reseed 3 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37 $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1
+profile "./nvBowtie --seed-len 20 --max-reseed 3 --file-ref $index_path/HG_index_NvBowtie_default/hsapiens_v37.fa $dataset_path/$IN.fastq $results_path/$OUT.sam > $log_path/$OUT.log 2>&1"
+
 
 #Returning to original path
 cd $original_path
