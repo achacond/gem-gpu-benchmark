@@ -22,13 +22,14 @@ echo "Start installing nvBowtie (nvBio) V0.9.9.3"
 echo "Start installing nvBowtie (nvBio) V0.9.9.3" > $logfile 2>&1
 
 rm -Rf nvbio-0.9.9.3
-rm -f v0.9.9.3.tar.gz
+rm -f master.zip
 
 echo "Downloading v0.9.9.tar.gz ..."
-wget https://github.com/NVlabs/nvbio/archive/v0.9.9.3.tar.gz  >> $logfile 2>&1
+wget https://github.com/NVlabs/nvbio/archive/master.zip  >> $logfile 2>&1
 
 echo "Unpaking ..."
-tar -xzvf v0.9.9.3.tar.gz  >> $logfile 2>&1
+unzip master.zip  >> $logfile 2>&1
+mv nvbio-master nvbio-0.9.9.3
 
 echo "Compiling ..."
 cd nvbio-0.9.9.3

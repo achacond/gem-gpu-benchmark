@@ -13,6 +13,7 @@
 #SBATCH --output=../../logs/SOAP3DP-GPU.gindex.summary.log
 #SBATCH --error=../../logs/SOAP3DP-GPU.gindex.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 logfile="../../logs/SOAP3DP-GPU.gindex.err"
@@ -24,7 +25,7 @@ echo "SOAP3DP-GPU V2.3.r177 - Indexing human genome v37 - default parameters" > 
 mkdir -p ../../data/indexes/HG_index_soap3-dp_default >> $logfile 2>&1
 
 ### Run command
-\time -v ../../software/mappers/soap3-dp-2.3.r177/soap3-dp-builder ../../data/references/hsapiens_v37.fa >> $logfile 2>&1  
-\time -v ../../software/mappers/soap3-dp-2.3.r177/BGS-Build ../../data/references/hsapiens_v37.fa.index >> $logfile 2>&1
+profile "../../software/mappers/soap3-dp-2.3.r177/soap3-dp-builder ../../data/references/hsapiens_v37.fa >> $logfile 2>&1"  
+profile "../../software/mappers/soap3-dp-2.3.r177/BGS-Build ../../data/references/hsapiens_v37.fa.index >> $logfile 2>&1"
 
 mv ../../data/references/hsapiens_v37.fa.index.* ../../data/indexes/HG_index_soap3-dp_default/ >> $logfile 2>&1

@@ -17,13 +17,13 @@ echo "Launching BWA indexing job ..."
 #$binary_launcher gen_index_BWA_default.sh
 
 echo "Launching Bowtie2 indexing job ..."
-#$binary_launcher gen_index_bowtie2_default.sh
+$binary_launcher gen_index_bowtie2_default.sh
 
 echo "Launching Cushaw2-GPU indexing job ..."
 #$binary_launcher gen_index_cushaw2-gpu_default.sh
 
 echo "Launching HPG-Aligner indexing job ..."
-$binary_launcher gen_index_hpg-aligner_default.sh
+#$binary_launcher gen_index_hpg-aligner_default.sh
 
 echo "Launching nvBowtie indexing job ..."
 #$binary_launcher gen_index_nvbowtie_default.sh

@@ -20,26 +20,29 @@ if [[ -n $(hostname | grep node028) ]]; then
 	binary_launcher="sbatch"
 	cmake_bin="cmake28"
 
-	source /etc/profile.d/modules.sh
+	source /opt/Modules/3.2.9/init/Modules4bash.sh
 	module load gcc/4.9.1
 	module load cuda/6.5
+	module load likwid/3.1.2
 fi
 
 if [[ -n $(hostname | grep robin) ]]; then
 	binary_launcher="sbatch"
 	cmake_bin="cmake28"
 
-	source /etc/profile.d/modules.sh
+	source /opt/Modules/3.2.9/init/Modules4bash.sh
 	module load gcc/4.9.1
 	module load cuda/6.5
+	module load likwid/3.1.2
 fi
 
 if [[ -n $(hostname | grep huberman) ]]; then
 	binary_launcher="sbatch"
 	cmake_bin="cmake28"
 
-	source /etc/profile.d/modules.sh
+	source /opt/Modules/3.2.9/init/Modules4bash.sh
 	module load gcc/4.9.1
 	module load cuda/6.5
+	module load likwid/3.1.2
 fi
 

@@ -13,6 +13,7 @@
 #SBATCH --output=../../logs/SNAP.long.gindex.summary.log
 #SBATCH --error=../../logs/SNAP.long.gindex.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 logfile="../../logs/SNAP.long.gindex.err"
@@ -24,4 +25,4 @@ echo "SNAP 1.0beta.50 [USING SEEDS SIZE 22] - Building Human genome index for lo
 mkdir -p ../../data/indexes/HG_index_SNAP_long_reads >> $logfile 2>&1
 
 ### Run command
-\time -v ../../software/mappers/snap-1.0beta.50-linux/snap index ../../data/references/hsapiens_v37.fa ../../data/indexes/HG_index_SNAP_long_reads -s 22 >> $logfile 2>&1 
+profile "../../software/mappers/snap-1.0beta.50-linux/snap index ../../data/references/hsapiens_v37.fa ../../data/indexes/HG_index_SNAP_long_reads -s 22 >> $logfile 2>&1 "

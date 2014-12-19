@@ -13,6 +13,7 @@
 #SBATCH --output=../../logs/CUSHAW2.gindex.summary.log
 #SBATCH --error=../../logs/CUSHAW2.gindex.summary.log
 
+source ../common.sh
 source ../node_profiles.sh
 
 logfile="../../logs/CUSHAW2.gindex.err"
@@ -25,6 +26,6 @@ mkdir -p ../../data/indexes/HG_index_cushaw2-gpu_default >> $logfile 2>&1
 
 
 ### Run command
-\time -v ../../software/mappers/cushaw2-gpu-2.1.8-r16/cushaw2_index/cushaw2_index -a bwtsw ../../data/references/hsapiens_v37.fa >> $logfile 2>&1
+profile "../../software/mappers/cushaw2-gpu-2.1.8-r16/cushaw2_index/cushaw2_index -a bwtsw ../../data/references/hsapiens_v37.fa >> $logfile 2>&1"
 mv ../../data/references/hsapiens_v37.fa.* ../../data/indexes/HG_index_cushaw2-gpu_default/  >> $logfile 2>&1
 cp ../../data/references/hsapiens_v37.fa ../../data/indexes/HG_index_cushaw2-gpu_default/hsapiens_v37.fa 
