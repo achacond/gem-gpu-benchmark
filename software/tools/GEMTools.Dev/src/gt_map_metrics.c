@@ -231,10 +231,6 @@ GT_INLINE int64_t gt_map_get_observed_template_size(gt_map* const map_a,gt_map* 
     return -(rightmost-leftmost_b);
   }
 }
-//GT_INLINE int64_t gt_map_get_insert_size(gt_map* const map_a,gt_map* const map_b,gt_status* const error_code); // TODO
-//GT_INLINE int64_t gt_map_get_template_size(gt_map* const map_a,gt_map* const map_b,gt_status* const error_code); // TODO
-//GT_INLINE int64_t gt_mmap_get_insert_size(gt_map** const mmap,gt_status* const error_code); // TODO
-//GT_INLINE int64_t gt_mmap_get_template_size(gt_map** const mmap,gt_status* const error_code); // TODO
 /*
  * Strict Map compare functions
  *   1.- Same sequence name
@@ -318,6 +314,29 @@ GT_INLINE int64_t gt_map_range_cmp(gt_map* const map_1,gt_map* const map_2,const
       return map_1->strand==FORWARD ? 1 : -1;
     }
   }
+}
+/*
+ * CIGAR Map compare function
+ */
+GT_INLINE int64_t gt_map_cmp_cigar(gt_map* const map_1,gt_map* const map_2) {
+  GT_MAP_CHECK(map_1); GT_MAP_CHECK(map_2);
+  const uint64_t num_misms_1 = gt_vector_get_used(map_1->mismatches);
+  const uint64_t num_misms_2 = gt_vector_get_used(map_2->mismatches);
+  if (num_misms_1 != num_misms_2) {
+    return 1;
+  } else {
+    gt_misms* const misms_1 = gt_vector_get_mem(map_1->mismatches,gt_misms);
+    gt_misms* const misms_2 = gt_vector_get_mem(map_1->mismatches,gt_misms);
+    uint64_t i;
+    for (i=0;i<num_misms_1;++i) {
+      if (misms_1[i].misms_type != misms_2[i].misms_type ||
+          misms_1[i].position != misms_2[i].position) return 1;
+      if (misms_1[i].misms_type == MISMS &&
+          misms_1[i].base != misms_2[i].base) return 1;
+      if (misms_1[i].size != misms_2[i].size) return 1;
+    }
+  }
+  return 0;
 }
 /*
  * MMap compare functions (based on Map compare functions)

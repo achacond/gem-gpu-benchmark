@@ -169,7 +169,7 @@ GT_INLINE bool gt_template_find_mmap_fx(
   // Search for the mmap
   const uint64_t num_blocks = gt_template_get_num_blocks(template);
   uint64_t pos = 0;
-  if(template->alg_dictionary == NULL || template->alg_dictionary->refs_dictionary == NULL){
+  if (template->alg_dictionary == NULL || template->alg_dictionary->refs_dictionary == NULL) {
     GT_TEMPLATE_ITERATE_MMAP__ATTR_(template,template_mmap,mmap_attribute) {
       if (gt_mmap_cmp_fx(template_mmap,mmap,num_blocks)==0) {
         *found_mmap_pos = pos;
@@ -179,15 +179,15 @@ GT_INLINE bool gt_template_find_mmap_fx(
       }
       ++pos;
     }
-  }else{
+  } else {
     // indexed search only through other templates
     // with the first map on the same chromosome
     char* seq_name = gt_map_get_seq_name(mmap[0]);
-    if(!gt_shash_is_contained(template->alg_dictionary->refs_dictionary, seq_name)){
+    if (!gt_shash_is_contained(template->alg_dictionary->refs_dictionary, seq_name)) {
       return false;
     }
     gt_vector* dict_elements = gt_shash_get(template->alg_dictionary->refs_dictionary, seq_name, gt_vector);
-    GT_VECTOR_ITERATE(dict_elements, e, c, gt_template_dictionary_map_element*){
+    GT_VECTOR_ITERATE(dict_elements, e, c, gt_template_dictionary_map_element*) {
       gt_map** template_mmap = (*e)->mmap;
       if (gt_mmap_cmp_fx(template_mmap,mmap,num_blocks)==0) {
         *found_mmap_pos = pos;

@@ -70,6 +70,11 @@ GT_INLINE int64_t gt_map_cmp(gt_map* const map_1,gt_map* const map_2);
  */
 GT_INLINE int64_t gt_map_range_cmp(gt_map* const map_1,gt_map* const map_2,const uint64_t range_tolerated);
 /*
+ * CIGAR Map compare function
+ */
+GT_INLINE int64_t gt_map_cmp_cigar(gt_map* const map_1,gt_map* const map_2);
+
+/*
  * MMap compare functions (based on Map compare functions)
  */
 GT_INLINE int64_t gt_mmap_cmp(gt_map** const map_1,gt_map** const map_2,const uint64_t num_maps);

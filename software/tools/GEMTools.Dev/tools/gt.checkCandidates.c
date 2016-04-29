@@ -198,7 +198,7 @@ GT_INLINE void gt_check_candidates_align(
     if (gt_sequence_archive_retrieve_sequence_chunk(sequence_archive,
         gt_map_get_seq_name(candidate),FORWARD,gt_map_get_position(candidate),
         reference_length+extra_length,extra_length,candidates_sequence)) {
-      gt_fatal_error_msg("Couldn't retrieve reference sequence");
+      continue; // Ignore negative positions due to gem-mapper alignment offset
     }
     GPROF_STOP_TIMER(tprof[thread_id],GT_GPROF_RETRIEVE_TEXT);
 

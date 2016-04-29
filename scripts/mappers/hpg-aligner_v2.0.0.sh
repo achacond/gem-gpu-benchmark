@@ -26,15 +26,15 @@ logfile="$1"HPG.installation_mapping_tools.err
 #  libcurl4-gnutls-dev
 ####################################
 
-echo "Start installing HPG-aligner V2.0.0"
-echo "Start installing HPG-aligner V2.0.0" > $logfile 2>&1
-rm -Rf hpg-aligner-1.0.0
+echo "Start installing HPG-aligner V2.0.1"
+echo "Start installing HPG-aligner V2.0.1" > $logfile 2>&1
+rm -Rf hpg-aligner-2.0.1
 
-echo "Downloading hpg-aligner v2.0.0 ..."
+echo "Downloading hpg-aligner v2.0.1 ..."
 git clone https://github.com/opencb/hpg-aligner.git >> $logfile 2>&1
-mv hpg-aligner hpg-aligner-2.0.0
-cd hpg-aligner-2.0.0/
-git submodule update --init >> ../$logfile 2>&1
+mv hpg-aligner hpg-aligner-2.0.1
+cd hpg-aligner-2.0.1/
+git submodule update --init >> ../$logfile 2>&1	
 
 cd lib/hpg-libs
 git checkout develop

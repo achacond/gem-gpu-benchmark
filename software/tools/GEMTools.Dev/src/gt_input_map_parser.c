@@ -1090,7 +1090,9 @@ GT_INLINE gt_status gt_imp_parse_template_maps(
     if (current_end_position<2 && total_base_length != read_length[current_end_position]) {
       return GT_IMP_PE_MAP_INCONSISTENT_BLOCKS;
     }
-    if (current_end_position!=2) return GT_IMP_PE_MAP_BAD_NUMBER_OF_BLOCKS;
+    if (current_end_position!=2) {
+      return GT_IMP_PE_MAP_BAD_NUMBER_OF_BLOCKS;
+    }
     /*
      * Parse attributes (if any) and calculate template attributes
      */
@@ -1183,9 +1185,13 @@ GT_INLINE gt_status gt_imp_parse_alignment_maps(const char** const text_line,gt_
         last_map_block = last_added;
       }
       total_base_length += gt_map_get_global_base_length(last_map_block);
-      if (total_base_length > alignment_base_length) return GT_IMP_PE_MAP_INCONSISTENT_BLOCKS;
+      if (total_base_length > alignment_base_length) {
+        return GT_IMP_PE_MAP_INCONSISTENT_BLOCKS;
+      }
     } while (error_code==GT_IMP_PE_PENDING_BLOCKS);
-    if (total_base_length != alignment_base_length) return GT_IMP_PE_MAP_INCONSISTENT_BLOCKS;
+    if (total_base_length != alignment_base_length) {
+      return GT_IMP_PE_MAP_INCONSISTENT_BLOCKS;
+    }
     /*
      * Store map into alignment. FIXME: Should aim to erase duplicates ... Not only to strictly parse it
      */

@@ -26,12 +26,12 @@ echo "> Benchmarks for CUSHAW2 GPU 2.1.8-r16: $IN"
 
 mkdir -p $sorting_path
 
-OUT="$TAG.$OUT_PREFIX.t12.t$threads"
+OUT="$TAG.$OUT_PREFIX.default.K20"
 echo -n "==> Sorting $OUT ..."
 profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
 echo "Done"
 
-OUT="$TAG.$OUT_PREFIX.t12.t$threads"
+OUT="$TAG.$OUT_PREFIX.sensitive.K20"
 echo -n "==> Sorting $OUT ..."
 profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
 echo "Done"

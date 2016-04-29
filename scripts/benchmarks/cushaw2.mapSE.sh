@@ -3,16 +3,18 @@
 #SBATCH --job-name="CUSHAW2-SE"
 #SBATCH --exclusive
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=62G
-#SBATCH -w robin
-#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem=29900M
+#SBATCH -w bane
+#SBATCH --gres=gpu:2
 
-#SBATCH --time=20:00:00
+#SBATCH --time=80:00:00
 #SBATCH --partition=p_hpca4se 
 
 #SBATCH --output=../../logs/CUSHAW2.SE.mapping.summary.log 
 #SBATCH --error=../../logs/CUSHAW2.SE.mapping.summary.log
+
+echo $CUDA_VISIBLE_DEVICES > /tmp/nvidia-reset.$SLURM_JOB_ID
 
 source ../common.sh
 source ../node_profiles.sh
@@ -38,6 +40,8 @@ local_results_path="/tmp/data/results"
 
 echo "> Benchmarks for CUSHAW2 GPU 2.1.8-r16: $IN"
 
+profile "likwid-memsweeper"
+
 #$tools_path/FFC/flush_file $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa
 #$tools_path/FFC/flush_file $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa.amb
 #$tools_path/FFC/flush_file $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa.ann
@@ -46,18 +50,16 @@ echo "> Benchmarks for CUSHAW2 GPU 2.1.8-r16: $IN"
 #$tools_path/FFC/flush_file $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa.rpac
 #$tools_path/FFC/flush_file $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa.rsa
 
-profile "likwid-memsweeper"
-
 mkdir -p $results_path
 mkdir -p $log_path
-#mkdir $local_path/HG_index_cushaw2-gpu_default
-#cp -R $index_path/HG_index_cushaw2-gpu_default $local_index_path 
+cp -R $index_path/HG_index_cushaw2-gpu_default $local_index_path
+cp $dataset_path/SE.DUMMY.fastq $local_dataset_path 
 cp $dataset_path/$IN.fastq $local_dataset_path
 
 # Warm up
 ################################################################
 
-OUT_T1="$TAG.$OUT_PREFIX.warm.K20"
+OUT_T1="$TAG.$OUT_PREFIX.warm.K40"
 echo "==> Mapping $OUT_T1"
 profile "./cushaw2-gpu -t $num_threads -r $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa -f $local_dataset_path/$IN.fastq -o $local_results_path/$OUT_T1.sam > $log_path/$OUT_T1.log 2>&1"
 
@@ -70,11 +72,11 @@ profile "./cushaw2-gpu -t $num_threads -r $local_index_path/HG_index_cushaw2-gpu
 #  -sensitive (concerned more about the sensitivity, only using min_score)
 ################################################################
 
-OUT_T2="$TAG.$OUT_PREFIX.default.K20"
+OUT_T2="$TAG.$OUT_PREFIX.default.K40"
 echo "==> Mapping $OUT_T2"
 profile "./cushaw2-gpu -t $num_threads -r $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa -f $local_dataset_path/$IN.fastq -o $local_results_path/$OUT_T2.sam > $log_path/$OUT_T2.log 2>&1"
 
-OUT_T3="$TAG.$OUT_PREFIX.sensitive.K20"
+OUT_T3="$TAG.$OUT_PREFIX.sensitive.K40"
 echo "==> Mapping $OUT_T3"
 profile "./cushaw2-gpu -t $num_threads -sensitive -r $local_index_path/HG_index_cushaw2-gpu_default/hsapiens_v37.fa -f $local_dataset_path/$IN.fastq -o $local_results_path/$OUT_T3.sam > $log_path/$OUT_T3.log 2>&1"
 
@@ -84,7 +86,8 @@ mv $local_results_path/$OUT_T1.sam $results_path
 mv $local_results_path/$OUT_T2.sam $results_path
 mv $local_results_path/$OUT_T3.sam $results_path
 
-#rm -Rf $local_index_path/HG_index_cushaw2-gpu_default
+rm -Rf $local_index_path/HG_index_cushaw2-gpu_default
+rm -f $local_dataset_path/SE.DUMMY.fastq
 rm -f $local_dataset_path/$IN.fastq
 
 #Returning to original path

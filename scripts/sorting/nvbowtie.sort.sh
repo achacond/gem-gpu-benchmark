@@ -31,12 +31,20 @@ echo -n "==> Sorting $OUT ..."
 profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
 echo "Done"
 
+OUT="$TAG.$OUT_PREFIX.fast.K20"
+echo -n "==> Sorting $OUT ..."
+profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
+echo "Done"
 
 OUT="$TAG.$OUT_PREFIX.default.K20"
 echo -n "==> Sorting $OUT ..."
 profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
 echo "Done"
 
+OUT="$TAG.$OUT_PREFIX.sensitive.K20"
+echo -n "==> Sorting $OUT ..."
+profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
+echo "Done"
 
 OUT="$TAG.$OUT_PREFIX.very-sensitive.K20"
 echo -n "==> Sorting $OUT ..."

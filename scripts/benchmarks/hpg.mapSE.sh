@@ -3,11 +3,11 @@
 #SBATCH --job-name="HPG-SE"
 #SBATCH --exclusive
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=62G
-#SBATCH -w robin
+#SBATCH --cpus-per-task=24
+#SBATCH --mem=29900M
+#SBATCH -w bane
 
-#SBATCH --time=20:00:00
+#SBATCH --time=80:00:00
 #SBATCH --partition=p_hpca4se 
 
 #SBATCH --output=../../logs/HPG.SE.mapping.summary.log 
@@ -37,20 +37,20 @@ local_results_path="/tmp/data/results"
 
 echo "> Benchmarks for HPG-aligner 2.0.0: $IN"
 
+profile "likwid-memsweeper"
+
 mkdir -p $results_path
 mkdir -p $log_path
-#mkdir $local_path/HG_index_bowtie2_default
-#cp -R $index_path/HG_index_hpg-aligner_default $local_index_path 
+cp -R $index_path/HG_index_hpg-aligner_default $local_index_path
+cp $dataset_path/SE.DUMMY.fastq $local_dataset_path 
 cp $dataset_path/$IN.fastq $local_dataset_path
-
-profile "likwid-memsweeper"
 
 # Warm up
 ################################################################
 
 OUT_T1="$TAG.$OUT_PREFIX.warm.t$num_threads"
 echo "==> Mapping $OUT_T1"
-profile "./hpg-aligner dna --cpu-threads $num_threads -i $local_index_path/HG_index_hpg-aligner_default/ -f $local_dataset_path/$IN.fastq -o $local_results_path/$OUT_T1.sam> $log_path/$OUT_T1.log 2>&1"
+profile "./hpg-aligner dna --cpu-threads $num_threads -i $local_index_path/HG_index_hpg-aligner_default/ -f $local_dataset_path/SE.DUMMY.fastq -o $local_results_path/$OUT_T1.sam> $log_path/$OUT_T1.log 2>&1"
 
 
 # Test multi-threading
@@ -86,7 +86,8 @@ mv $local_results_path/$OUT_T3.sam/alignments.sam $results_path/$OUT_T3.sam
 mv $local_results_path/$OUT_T4.sam/alignments.sam $results_path/$OUT_T4.sam
 rm -Rf $local_results_path/$TAG.$OUT_PREFIX*
 
-#rm -Rf $local_index_path/HG_index_hpg-aligner_default
+rm -Rf $local_index_path/HG_index_hpg-aligner_default
+rm -f $local_dataset_path/SE.DUMMY.fastq
 rm -f $local_dataset_path/$IN.fastq
 
 #Returning to original path

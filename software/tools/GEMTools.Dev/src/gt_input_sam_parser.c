@@ -416,6 +416,8 @@ GT_INLINE gt_status gt_isp_parse_sam_opt_xa_bwa(
   *text_line+=5;
   while (**text_line!=TAB && **text_line!=EOL) { // Read new attached maps
     gt_map* map = gt_map_new();
+    map->phred_score = 0;
+    map->gt_score = 0;
     gt_map_set_base_length(map,gt_alignment_get_read_length(alignment));
     // Sequence-name/Chromosome
     const char* const seq_name = *text_line;
@@ -744,7 +746,7 @@ GT_INLINE void gt_isp_add_mmap(
     map_end[0] = (pending_maps_end1>1) ? mmap_end1[i] : mmap_end1[0];
     map_end[1] = (pending_maps_end2>1) ? mmap_end2[i] : mmap_end2[0];
     attr.distance = gt_map_get_global_distance(map_end[0])+gt_map_get_global_distance(map_end[1]);
-    attr.phred_score = GT_MAP_NO_PHRED_SCORE;
+    attr.phred_score = map_end[0]->phred_score;
     gt_template_inc_counter(template,attr.distance);
     gt_template_add_mmap_ends(template,map_end[0],map_end[1],&attr);
   }

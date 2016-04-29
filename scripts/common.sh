@@ -111,6 +111,25 @@ function launch_intersection()
     fi
 }
 
+function launch_mapset()
+{
+    source ../node_profiles.sh
+
+    prefix_file=$1
+    intersection_script=$2
+    fastaq_file=$3
+    path_logs="../../logs/$prefix_file"
+
+    mkdir -p $path_logs
+
+    if [ $binary_launcher == "bash" ]
+    then
+        $binary_launcher $sort_script $fastaq_file > $path_logs/$prefix_file.$fastaq_file.summary.log  2>&1
+    else
+        $binary_launcher --output=$path_logs/$prefix_file.$fastaq_file.mapset.log --error=$path_logs/$prefix_file.$fastaq_file.mapset.log $intersection_script $fastaq_file
+    fi
+}
+
 function launch_roc()
 {
     source ../node_profiles.sh

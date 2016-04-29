@@ -251,7 +251,7 @@ GT_INLINE gt_status gt_input_parse_sam_optional_field(const char** const text_li
     }
     default: { // Otherwise is a string
       const char* const begin_value = *text_line;
-      GT_READ_UNTIL(text_line,**text_line==SPACE);
+      GT_READ_UNTIL(text_line,**text_line==SPACE || **text_line==TAB);
       const uint64_t length = (*text_line-begin_value);
       gt_string* const string = gt_string_new(length+1);
       gt_string_set_nstring_static(string,begin_value,length);

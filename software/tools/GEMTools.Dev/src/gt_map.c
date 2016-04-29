@@ -143,10 +143,10 @@ GT_INLINE uint64_t gt_map_get_right_trim_length(gt_map* const map) {
 }
 // Begin/End Mapping Position
 GT_INLINE uint64_t gt_map_get_begin_mapping_position(gt_map* const map) {
-  return map->position-gt_map_get_left_trim_length(map);
+  return map->position; //-gt_map_get_left_trim_length(map); // FIXME
 }
 GT_INLINE uint64_t gt_map_get_end_mapping_position(gt_map* const map) {
-  return map->position+gt_map_get_length(map) - 1;
+  return map->position+gt_map_get_length(map) - 1; // FIXME No del counted
 }
 /*
  * Mismatch Handlers

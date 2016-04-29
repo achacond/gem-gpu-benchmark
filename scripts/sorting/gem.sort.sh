@@ -26,12 +26,22 @@ echo "> Benchmarks for GEM-GPU (git): $IN"
 
 mkdir -p $sorting_path
 
-OUT="$TAG.$OUT_PREFIX.t12"
+OUT="$TAG.$OUT_PREFIX.fast.t32"
 echo -n "==> Sorting $OUT ..."
 profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
 echo "Done"
 
-OUT="$TAG.$OUT_PREFIX.t12.K20"
+OUT="$TAG.$OUT_PREFIX.default.t32"
+echo -n "==> Sorting $OUT ..."
+profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
+echo "Done"
+
+OUT="$TAG.$OUT_PREFIX.default.t32.K20"
+echo -n "==> Sorting $OUT ..."
+profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
+echo "Done"
+
+OUT="$TAG.$OUT_PREFIX.default.t32.K20.emu"
 echo -n "==> Sorting $OUT ..."
 profile "LANG=C grep -v ^'@' $results_path/$OUT.sam | sort -V -k 1 -t $'\t' > $sorting_path/$OUT.sam.sorted"
 echo "Done"

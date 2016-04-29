@@ -3,16 +3,18 @@
 #SBATCH --job-name="SOAP3DP-GPU-SE"
 #SBATCH --exclusive
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=62G
-#SBATCH -w robin
-#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=24
+#SBATCH --mem=29900M
+#SBATCH -w bane
+#SBATCH --gres=gpu:2
 
-#SBATCH --time=20:00:00
+#SBATCH --time=80:00:00
 #SBATCH --partition=p_hpca4se 
 
 #SBATCH --output=../../logs/SOAP3DP-GPU.SE.mapping.summary.log 
 #SBATCH --error=../../logs/SOAP3DP-GPU.SE.mapping.summary.log
+
+echo $CUDA_VISIBLE_DEVICES > /tmp/nvidia-reset.$SLURM_JOB_ID
 
 source ../common.sh
 source ../node_profiles.sh
@@ -23,7 +25,7 @@ TAG="SOAP3DP-GPU"
 
 #Changing working directory
 original_path=`pwd`
-mapper_path="../../software/mappers/soap3-dp-2.3.r177"
+mapper_path="../../software/mappers/soap3-dp-2.3.r180"
 cd $mapper_path
 
 index_path="../../../data/indexes"
@@ -37,20 +39,22 @@ local_index_path="/tmp/data/indexes"
 local_results_path="/tmp/data/results"
 
 max_query_size="120"
-if [[ -n $(echo $IN | grep ".HiSeq.") ]]; then
+if [[ -n $(echo $IN | grep ".l100.") ]]; then
 	max_query_size="100"
 fi
-if [[ -n $(echo $IN | grep ".MiSeq.") ]]; then
+if [[ -n $(echo $IN | grep ".l250.") ]]; then
 	max_query_size="250"
 fi
-if [[ -n $(echo $IN | grep "l500") ]]; then
+if [[ -n $(echo $IN | grep ".l500.") ]]; then
 	max_query_size="500"
 fi
-if [[ -n $(echo $IN | grep "l1000") ]]; then
+if [[ -n $(echo $IN | grep ".l1000.") ]]; then
 	max_query_size="1000"
 fi
 
-echo "> Benchmarks for SOAP3DP-GPU 2.3.r177: $IN"
+echo "> Benchmarks for SOAP3DP-GPU 2.3.r180: $IN"
+
+profile "likwid-memsweeper"
 
 #$tools_path/FFC/flush_file $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index.amb
 #$tools_path/FFC/flush_file $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index.ann
@@ -70,20 +74,18 @@ echo "> Benchmarks for SOAP3DP-GPU 2.3.r177: $IN"
 #$tools_path/FFC/flush_file $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index.sa
 #$tools_path/FFC/flush_file $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index.tra
 
-profile "likwid-memsweeper"
-
 mkdir -p $results_path
 mkdir -p $log_path
-#mkdir $local_path/HG_index_soap3-dp_default
-#cp -R $index_path/HG_index_soap3-dp_default $local_index_path 
+cp -R $index_path/HG_index_soap3-dp_default $local_index_path
+cp $dataset_path/SE.DUMMY.fastq $local_dataset_path 
 cp $dataset_path/$IN.fastq $local_dataset_path
 
 # Warm up
 ################################################################
 
-OUT_T1="$TAG.$OUT_PREFIX.warm.K20"
+OUT_T1="$TAG.$OUT_PREFIX.warm.K40"
 echo "==> Mapping $OUT_T1"
-profile "./soap3-dp single $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index $local_dataset_path/$IN.fastq -o $local_results_path/$OUT_T1.sam -L $max_query_size -c 0 > $log_path/$OUT_T1.log 2>&1"
+profile "./soap3-dp single $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index $local_dataset_path/SE.DUMMY.fastq -o $local_results_path/$OUT_T1.sam -L $max_query_size -c 0 > $log_path/$OUT_T1.log 2>&1"
 $tools_path/SOAP3_tools/make_view_sam.sh $local_results_path/$OUT_T1.sam
 
 # Test multi-threading
@@ -93,7 +95,7 @@ $tools_path/SOAP3_tools/make_view_sam.sh $local_results_path/$OUT_T1.sam
 #    -c <GPU device ID> 
 ################################################################
 
-OUT_T2="$TAG.$OUT_PREFIX.default.K20"
+OUT_T2="$TAG.$OUT_PREFIX.default.K40"
 echo "==> Mapping $OUT_T2"
 profile "./soap3-dp single $local_index_path/HG_index_soap3-dp_default/hsapiens_v37.fa.index $local_dataset_path/$IN.fastq -o $local_results_path/$OUT_T2.sam -L $max_query_size -c 0 > $log_path/$OUT_T2.log 2>&1"
 $tools_path/SOAP3_tools/make_view_sam.sh $local_results_path/$OUT_T2.sam
@@ -103,7 +105,8 @@ $tools_path/SOAP3_tools/make_view_sam.sh $local_results_path/$OUT_T2.sam
 mv $local_results_path/$OUT_T1.sam $results_path
 mv $local_results_path/$OUT_T2.sam $results_path
 
-#rm -Rf $local_index_path/HG_index_soap3-dp_default
+rm -Rf $local_index_path/HG_index_soap3-dp_default
+rm -f $local_dataset_path/SE.DUMMY.fastq
 rm -f $local_dataset_path/$IN.fastq
 
 #Returning to original path

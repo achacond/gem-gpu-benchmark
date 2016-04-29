@@ -26,7 +26,7 @@ cd $gt_path
 sorting_path="../../../../data/sorts/$TAG"
 stats_path="../../../../data/stats/$TAG"
 
-echo "> Benchmarks for NVBOWTIE 0.9.9.3: $IN"
+echo "> Benchmarks for NVBOWTIE 1.1.0: $IN"
 
 mkdir -p $stats_path
 
@@ -35,12 +35,20 @@ echo -n "==> Stats of $OUT ..."
 profile "./gt.stats -a -i $sorting_path/$OUT.sam.sorted -t $num_threads > $stats_path/$OUT.sam.stats"
 echo "Done"
 
+OUT="$TAG.$OUT_PREFIX.fast.K20"
+echo -n "==> Stats of $OUT ..."
+profile "./gt.stats -a -i $sorting_path/$OUT.sam.sorted -t $num_threads > $stats_path/$OUT.sam.stats"
+echo "Done"
 
 OUT="$TAG.$OUT_PREFIX.default.K20"
 echo -n "==> Stats of $OUT ..."
 profile "./gt.stats -a -i $sorting_path/$OUT.sam.sorted -t $num_threads > $stats_path/$OUT.sam.stats"
 echo "Done"
 
+OUT="$TAG.$OUT_PREFIX.sensitive.K20"
+echo -n "==> Stats of $OUT ..."
+profile "./gt.stats -a -i $sorting_path/$OUT.sam.sorted -t $num_threads > $stats_path/$OUT.sam.stats"
+echo "Done"
 
 OUT="$TAG.$OUT_PREFIX.very-sensitive.K20"
 echo -n "==> Stats of $OUT ..."

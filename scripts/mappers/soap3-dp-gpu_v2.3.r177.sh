@@ -29,7 +29,7 @@ rm -f soap3-dp-src.tgz >> $logfile 2>&1
 echo "Downloading soap3-dp-src.tgz ..."
 wget http://downloads.sourceforge.net/project/soap3dp/r177-src/soap3-dp-src.tgz >> $logfile 2>&1
 
-echo "Unpaking ..."
+echo "Unpacking ..."
 tar -xvzf soap3-dp-src.tgz >> $logfile 2>&1
 mv release soap3-dp-2.3.r177 >> $logfile 2>&1
 

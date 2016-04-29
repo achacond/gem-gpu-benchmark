@@ -11,13 +11,13 @@ source ../node_profiles.sh
 ####################
 
 echo "Launching GEM-GPU indexing job ..."
-#$binary_launcher gen_index_GEM-GPU_profile_default.sh
+$binary_launcher gen_index_GEM-GPU_profile_default.sh
 
 echo "Launching BWA indexing job ..."
 #$binary_launcher gen_index_BWA_default.sh
 
 echo "Launching Bowtie2 indexing job ..."
-$binary_launcher gen_index_bowtie2_default.sh
+#$binary_launcher gen_index_bowtie2_default.sh
 
 echo "Launching Cushaw2-GPU indexing job ..."
 #$binary_launcher gen_index_cushaw2-gpu_default.sh

@@ -164,8 +164,9 @@ gt_option gt_mapset_options[] = {
       "        compare\n"
       "        join\n"
       "        display-compact\n"
+      "        specificity-profile\n"
       "     [Map Specific]\n"
-      "        merge-map\n" , "" },
+      "        merge-map" , "" },
   /* I/O */
   { 300, "i1", GT_OPT_REQUIRED, GT_OPT_STRING, 3 , true, "<file>" , "" },
   { 301, "i2", GT_OPT_REQUIRED, GT_OPT_STRING, 3 , true, "<file>" , "" },
@@ -174,8 +175,9 @@ gt_option gt_mapset_options[] = {
   { 'o', "output", GT_OPT_REQUIRED, GT_OPT_STRING, 3 , true, "<file>" , "" },
   /* Compare Function */
   { 's', "files-with-same-reads", GT_OPT_NO_ARGUMENT, GT_OPT_NONE, 4 , true, "" , "" },
-  { 400, "eq-th", GT_OPT_REQUIRED, GT_OPT_FLOAT, 4 , true, "<integer>|<float> (Difference tolerated between positions)" , "" },
-  { 401, "strict", GT_OPT_NO_ARGUMENT, GT_OPT_NONE, 4 , true, "(Strict comparison of mappings)" , "" },
+  { 400, "eq-th", GT_OPT_REQUIRED, GT_OPT_FLOAT, 4 , true, "<integer>|<float> (Difference tolerated between positions)" , "(default=20%)" },
+  { 401, "strict", GT_OPT_NO_ARGUMENT, GT_OPT_NONE, 4 , true, "(Strict comparison of mappings)" , "(default=false)" },
+  { 'q', "mapq", GT_OPT_REQUIRED, GT_OPT_INT, 4 , true, "<integer>" , "(default=0)" },
   /* Misc */
   { 'v', "verbose", GT_OPT_NO_ARGUMENT, GT_OPT_NONE, 5, true, "", ""},
 #ifdef HAVE_OPENMP
@@ -292,11 +294,13 @@ GT_INLINE void gt_options_fprint_menu(
     if (options[i].option_id<128 && gt_is_alphanumeric(short_option)) {
       fprintf(stream,"|-%c",short_option);
     }
-    // Print extra command line syntax info
-    fprintf(stream," %s\n",options[i].command_info);
     // Print description (@print_description)
     if (print_description && !gt_streq(options[i].description,"")) {
-      fprintf(stream,"%s",options[i].description);
+      // Print extra command line syntax info
+      fprintf(stream," %s\t%s\n",options[i].command_info,options[i].description);
+    } else {
+      // Print extra command line syntax info
+      fprintf(stream," %s\n",options[i].command_info);
     }
   }
 }
